@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <div id="app"></div>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    user : {
+                        username : 'desde el padre',
+                        log : false
+                }
+                }
+            },
+            template : `
+                <login v-if="!user.log" @setUsername="user.username = $event" :liststate ="user.log"></login>
+            `
+        })
+        app.component("login",{
+            data() {
+                return {
+                    username : '',
+                    stateuser : false
+                }
+            },
+            props : ['liststate'],
+            methods : {
+                setUsername() {
+                   this.$emit('set-username', this.username);
+                }
+            },
+            watch : {
+                liststate(value) {
+                    this.stateuser = this.liststate;
+                }
+            },
+            template : `
+                <div>
+                    <h2>Welcome, Set your name</h2>
+                    <input type="text" placeholder="Please enter your name here" v-model="username"/>
+                    <rendbutton></rendbutton>
+                </div>
+            `
+        })
+        app.component("rendbutton",{
+            data() {
+                return {
+
+                }
+            },
+            template : `
+                <button></button>
+            `
+        })
+        const vm = app.mount('#app')
+    </script>
+</body>
+</html>
